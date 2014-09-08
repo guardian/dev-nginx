@@ -44,3 +44,6 @@ EOS
 end
 
 file.close
+
+
+`./restart-nginx.sh`
