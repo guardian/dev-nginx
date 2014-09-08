@@ -15,11 +15,12 @@ config_file = ARGV[0]
 config = YAML.load_file(config_file)
 
 dest = File.join(NGINX_DIR, "sites-enabled", "#{config['name']}.conf")
-file = File.open(dest, 'w')
 
-config['mappings'].each do |mapping|
+file = File.open(dest, 'w') do |file|
 
-file.write <<-EOS
+    config['mappings'].each do |mapping|
+
+        file.write <<-EOS
 server {
   listen 443;
   server_name #{mapping['prefix']}.#{DOMAIN_ROOT};
@@ -41,9 +42,8 @@ server {
 
 EOS
 
+    end
 end
-
-file.close
 
 
 `./restart-nginx.sh`
