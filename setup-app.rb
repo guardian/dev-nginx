@@ -13,8 +13,11 @@ NGINX_DIR = `./locate-nginx.sh`.chomp
 config_file = ARGV[0]
 
 config = YAML.load_file(config_file)
+name = config['name']
+ssl = config.key?('ssl') ? config['ssl'] : true
+port = ssl ? 443 : 80
 
-dest = File.join(NGINX_DIR, "sites-enabled", "#{config['name']}.conf")
+dest = File.join(NGINX_DIR, "sites-enabled", "#{name}.conf")
 
 file = File.open(dest, 'w') do |file|
 
@@ -22,9 +25,17 @@ file = File.open(dest, 'w') do |file|
 
         file.write <<-EOS
 server {
-  listen 443;
+  listen #{port};
   server_name #{mapping['prefix']}.#{DOMAIN_ROOT};
 
+  location / {
+    proxy_pass http://localhost:#{mapping['port']};
+  }
+
+EOS
+
+        if ssl
+            file.write <<-EOS
   ssl on;
   ssl_certificate     star.#{DOMAIN_ROOT}.crt;
   ssl_certificate_key star.#{DOMAIN_ROOT}.key;
@@ -34,10 +45,10 @@ server {
   ssl_protocols SSLv2 SSLv3 TLSv1;
   ssl_ciphers HIGH:!aNULL:!MD5;
   ssl_prefer_server_ciphers on;
+EOS
+        end
 
-  location / {
-    proxy_pass http://localhost:#{mapping['port']};
-  }
+        file.write <<-EOS
 }
 
 EOS
