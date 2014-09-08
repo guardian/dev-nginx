@@ -26,8 +26,8 @@ server {
   server_name #{mapping['prefix']}.#{DOMAIN_ROOT};
 
   ssl on;
-  ssl_certificate local.crt;
-  ssl_certificate_key local.key;
+  ssl_certificate     star.#{DOMAIN_ROOT}.crt;
+  ssl_certificate_key star.#{DOMAIN_ROOT}.key;
 
   ssl_session_timeout 5m;
 
