@@ -37,7 +37,7 @@ EOS
         if ssl
             file.write <<-EOS
   ssl on;
-  ssl_certificate     star.#{DOMAIN_ROOT}.crt;
+  ssl_certificate     star.#{DOMAIN_ROOT}.chained.crt;
   ssl_certificate_key star.#{DOMAIN_ROOT}.key;
 
   ssl_session_timeout 5m;
