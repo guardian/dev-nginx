@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'yaml'
+require 'fileutils'
 
 if ARGV.size != 1
     puts "usage: install-app.rb <config.yml>"
@@ -17,7 +18,10 @@ name = config['name']
 ssl = config.key?('ssl') ? config['ssl'] : true
 port = ssl ? 443 : 80
 
-dest = File.join(NGINX_DIR, "sites-enabled", "#{name}.conf")
+dest_dir = File.join(NGINX_DIR, "sites-enabled")
+FileUtils.mkdir_p(dest_dir)
+
+dest = File.join(dest_dir, "#{name}.conf")
 
 file = File.open(dest, 'w') do |file|
 
