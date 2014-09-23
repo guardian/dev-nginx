@@ -8,7 +8,7 @@ if ARGV.size != 1
     exit(1)
 end
 
-DOMAIN_ROOT = "local.dev-gutools.co.uk"
+DEFAULT_DOMAIN_ROOT = "local.dev-gutools.co.uk"
 NGINX_DIR = `./locate-nginx.sh`.chomp
 
 config_file = ARGV[0]
@@ -17,6 +17,7 @@ config = YAML.load_file(config_file)
 name = config['name']
 ssl = config.key?('ssl') ? config['ssl'] : true
 port = ssl ? 443 : 80
+global_domain_root = config['domain-root'] || DEFAULT_DOMAIN_ROOT
 
 dest_dir = File.join(NGINX_DIR, "sites-enabled")
 FileUtils.mkdir_p(dest_dir)
@@ -27,10 +28,12 @@ file = File.open(dest, 'w') do |file|
 
     config['mappings'].each do |mapping|
 
+        domain_root = mapping['domain-root'] || global_domain_root
+
         file.write <<-EOS
 server {
   listen #{port};
-  server_name #{mapping['prefix']}.#{DOMAIN_ROOT};
+  server_name #{mapping['prefix']}.#{domain_root};
 
   location / {
     proxy_pass http://localhost:#{mapping['port']};
@@ -44,8 +47,8 @@ EOS
         if ssl
             file.write <<-EOS
   ssl on;
-  ssl_certificate     star.#{DOMAIN_ROOT}.chained.crt;
-  ssl_certificate_key star.#{DOMAIN_ROOT}.key;
+  ssl_certificate     star.#{domain_root}.chained.crt;
+  ssl_certificate_key star.#{domain_root}.key;
 
   ssl_session_timeout 5m;
 
