@@ -29,6 +29,7 @@ file = File.open(dest, 'w') do |file|
     config['mappings'].each do |mapping|
 
         domain_root = mapping['domain-root'] || global_domain_root
+        path = mapping['path'] || ''
 
         file.write <<-EOS
 server {
@@ -36,7 +37,7 @@ server {
   server_name #{mapping['prefix']}.#{domain_root};
 
   location / {
-    proxy_pass http://localhost:#{mapping['port']};
+    proxy_pass http://localhost:#{mapping['port']}#{path};
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
