@@ -20,7 +20,7 @@ $ ./setup-certs.sh
 To install the nginx config for an application that has an `nginx-mapping.yml` file:
 
 ```
-$ sudo ./setup-app.sh path/to/nginx-mapping.yml
+$ sudo ./setup-app.rb path/to/nginx-mapping.yml
 ```
 
 Note that you will need to run this command again if the mapping file changes.
