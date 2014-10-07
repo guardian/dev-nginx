@@ -4,7 +4,7 @@ require 'yaml'
 require 'fileutils'
 
 if ARGV.size != 1
-    puts "usage: install-app.rb <config.yml>"
+    puts "usage: setup-app.rb <config.yml>"
     exit(1)
 end
 
