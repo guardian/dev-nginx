@@ -64,6 +64,19 @@ EOS
 
 EOS
 
+        if ssl
+          file.write <<-EOS
+server {
+  listen 80;
+  server_name #{mapping['prefix']}.#{domain_root};
+
+  # redirect all HTTP traffic to HTTPS
+  return 301 https://$host$request_uri;
+}
+
+EOS
+        end
+
     end
 end
 
