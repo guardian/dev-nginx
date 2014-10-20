@@ -35,6 +35,13 @@ file = File.open(dest, 'w') do |file|
 server {
   listen #{port};
   server_name #{mapping['prefix']}.#{domain_root};
+  
+  location /socket/ {
+    proxy_pass http://localhost:9000/socket/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
 
   location / {
     proxy_pass http://localhost:#{mapping['port']}#{path};
