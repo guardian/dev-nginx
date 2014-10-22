@@ -29,7 +29,7 @@ file = File.open(dest, 'w') do |file|
 
         domain_root = mapping['domain-root'] || global_domain_root
         path = mapping['path'] || ''
-        websocket = mapping['websocket'] || false
+        websocket = mapping['websocket']
         file.write <<-EOS
 server {
   listen #{port};
@@ -37,15 +37,15 @@ server {
 
 EOS
   if websocket
-		file.write <<-EOS	
+    file.write <<-EOS	
   
-  		location #{websocket}/ {
-    		proxy_pass http://localhost:#{mapping['port']}#{websocket}/;
-    		proxy_http_version 1.1;
-    		proxy_set_header Upgrade $http_upgrade;
-    		proxy_set_header Connection "upgrade";
-  		}
-	EOS
+    location #{websocket}/ {
+	    proxy_pass http://localhost:#{mapping['port']}#{websocket}/;
+	    proxy_http_version 1.1;
+	    proxy_set_header Upgrade $http_upgrade;
+	    proxy_set_header Connection "upgrade";
+    }
+EOS
 	end
 	
 	file.write <<-EOS
@@ -59,21 +59,21 @@ EOS
 
 EOS
 
-        if ssl
-            file.write <<-EOS
-  ssl on;
-  ssl_certificate     star.#{domain_root}.chained.crt;
-  ssl_certificate_key star.#{domain_root}.key;
+  if ssl
+    file.write <<-EOS
+    ssl on;
+    ssl_certificate     star.#{domain_root}.chained.crt;
+    ssl_certificate_key star.#{domain_root}.key;
 
-  ssl_session_timeout 5m;
+    ssl_session_timeout 5m;
 
-  ssl_protocols SSLv2 SSLv3 TLSv1;
-  ssl_ciphers HIGH:!aNULL:!MD5;
-  ssl_prefer_server_ciphers on;
+    ssl_protocols SSLv2 SSLv3 TLSv1;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
 EOS
-        end
+  end
 
-        file.write <<-EOS
+  file.write <<-EOS
 }
 
 EOS
