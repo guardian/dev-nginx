@@ -36,44 +36,44 @@ server {
   server_name #{mapping['prefix']}.#{domain_root};
 
 EOS
-  if websocket
-    file.write <<-EOS	
-  
+        if ssl
+            file.write <<-EOS
+
     location #{websocket}/ {
-	    proxy_pass http://localhost:#{mapping['port']}#{websocket}/;
-	    proxy_http_version 1.1;
-	    proxy_set_header Upgrade $http_upgrade;
-	    proxy_set_header Connection "upgrade";
+      proxy_pass http://localhost:#{mapping['port']}#{websocket}/;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
     }
 EOS
-	end
-	
+        end
+
 	file.write <<-EOS
 
-    location / {
-      proxy_pass http://localhost:#{mapping['port']}#{path};
-    	proxy_set_header X-Real-IP $remote_addr;
-    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    	proxy_redirect default;
-  	}
+  location / {
+    proxy_pass http://localhost:#{mapping['port']}#{path};
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_redirect default;
+  }
 
 EOS
 
-  if ssl
-    file.write <<-EOS
-    ssl on;
-    ssl_certificate     star.#{domain_root}.chained.crt;
-    ssl_certificate_key star.#{domain_root}.key;
+        if ssl
+            file.write <<-EOS
+  ssl on;
+  ssl_certificate     star.#{domain_root}.chained.crt;
+  ssl_certificate_key star.#{domain_root}.key;
 
-    ssl_session_timeout 5m;
+  ssl_session_timeout 5m;
 
-    ssl_protocols SSLv2 SSLv3 TLSv1;
-    ssl_ciphers HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
+  ssl_protocols SSLv2 SSLv3 TLSv1;
+  ssl_ciphers HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
 EOS
-  end
+        end
 
-  file.write <<-EOS
+        file.write <<-EOS
 }
 
 EOS
