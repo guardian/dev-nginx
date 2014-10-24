@@ -18,7 +18,6 @@ name = config['name']
 ssl = config.key?('ssl') ? config['ssl'] : true
 port = ssl ? 443 : 80
 global_domain_root = config['domain-root'] || DEFAULT_DOMAIN_ROOT
-
 dest_dir = File.join(NGINX_DIR, "sites-enabled")
 FileUtils.mkdir_p(dest_dir)
 
@@ -30,11 +29,26 @@ file = File.open(dest, 'w') do |file|
 
         domain_root = mapping['domain-root'] || global_domain_root
         path = mapping['path'] || ''
-
+        websocket = mapping['websocket']
         file.write <<-EOS
 server {
   listen #{port};
   server_name #{mapping['prefix']}.#{domain_root};
+
+EOS
+        if ssl
+            file.write <<-EOS
+
+    location #{websocket}/ {
+      proxy_pass http://localhost:#{mapping['port']}#{websocket}/;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+    }
+EOS
+        end
+
+	file.write <<-EOS
 
   location / {
     proxy_pass http://localhost:#{mapping['port']}#{path};
