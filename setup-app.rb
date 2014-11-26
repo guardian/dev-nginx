@@ -30,10 +30,15 @@ file = File.open(dest, 'w') do |file|
         domain_root = mapping['domain-root'] || global_domain_root
         path = mapping['path'] || ''
         websocket = mapping['websocket']
+
+        domain = "#{mapping['prefix']}.#{domain_root}"
+        # compute base as prefix may have contained subdomains too
+        domain_base = domain.gsub(/^[-a-z]+\./, '')
+
         file.write <<-EOS
 server {
   listen #{port};
-  server_name #{mapping['prefix']}.#{domain_root};
+  server_name #{domain};
 
 EOS
         if ssl
@@ -62,8 +67,8 @@ EOS
         if ssl
             file.write <<-EOS
   ssl on;
-  ssl_certificate     star.#{domain_root}.chained.crt;
-  ssl_certificate_key star.#{domain_root}.key;
+  ssl_certificate     star.#{domain_base}.chained.crt;
+  ssl_certificate_key star.#{domain_base}.key;
 
   ssl_session_timeout 5m;
 
@@ -82,7 +87,7 @@ EOS
           file.write <<-EOS
 server {
   listen 80;
-  server_name #{mapping['prefix']}.#{domain_root};
+  server_name #{domain};
 
   # redirect all HTTP traffic to HTTPS
   return 301 https://$host$request_uri;
