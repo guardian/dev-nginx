@@ -41,7 +41,7 @@ server {
   server_name #{domain};
 
 EOS
-        if ssl
+        if websocket
             file.write <<-EOS
 
     location #{websocket}/ {
