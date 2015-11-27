@@ -34,13 +34,21 @@ file = File.open(dest, 'w') do |file|
         domain = "#{mapping['prefix']}.#{domain_root}"
         # compute base as prefix may have contained subdomains too
         domain_base = domain.gsub(/^[-a-z]+\./, '')
+        client_max_body_size = mapping['client_max_body_size']
 
         file.write <<-EOS
 server {
   listen #{port};
   server_name #{domain};
-
 EOS
+        if client_max_body_size
+          file.write <<-EOS
+  client_max_body_size #{client_max_body_size};
+
+          EOS
+
+        end
+
         if websocket
             file.write <<-EOS
 
