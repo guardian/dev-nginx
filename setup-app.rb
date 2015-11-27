@@ -46,7 +46,6 @@ EOS
   client_max_body_size #{client_max_body_size};
 
           EOS
-
         end
 
         if websocket
