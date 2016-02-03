@@ -15,6 +15,16 @@ To install the SSL certificate files:
 $ ./setup-certs.sh
 ```
 
+### Trust root cert
+You'll need to add the root cert as a trusted CA.
+
+#### OSX
+Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) to the Keychain - [guide](https://support.apple.com/kb/PH18677?locale=en_US).
+
+#### Firefox
+Firefox uses its own certificate repository. Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/).
+
+
 ## Install config for an application
 
 To install the nginx config for an application that has an `nginx-mapping.yml` file:
