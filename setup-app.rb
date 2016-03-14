@@ -33,7 +33,8 @@ file = File.open(dest, 'w') do |file|
 
         domain = "#{mapping['prefix']}.#{domain_root}"
         # compute base as prefix may have contained subdomains too
-        domain_base = domain.gsub(/^[-a-z]+\./, '')
+        domain_base = domain.gsub(/^([a-z0-9]|\-)+\./, '')
+        domain = "#{mapping['prefix']}.#{domain_root}"
         client_max_body_size = mapping['client_max_body_size']
 
         file.write <<-EOS
