@@ -15,6 +15,14 @@ To install the SSL certificate files:
 $ ./setup-certs.sh
 ```
 
+NB: If you've never ran nginx before performing the above step the script might issue 
+
+```
+nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or directory)
+```
+
+in which case it should be enough to just rerun it. 
+
 ### Trust root cert
 You'll need to add the root cert as a trusted CA.
 
@@ -22,7 +30,7 @@ You'll need to add the root cert as a trusted CA.
 Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) to the Keychain - [guide](https://support.apple.com/kb/PH18677?locale=en_US).
 
 #### Firefox
-Firefox uses its own certificate repository. Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/).
+Firefox uses its own certificate repository. Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/) (NB: This guide is slightly out of date. The "Encryption" pane in the "Advanced" menu item is now called "Certificates". Then, after importing the certificate, you might have to tick all options of the "trust settings" section).
 
 
 ## Install config for an application
