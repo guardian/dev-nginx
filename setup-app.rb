@@ -56,6 +56,7 @@ EOS
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "upgrade";
+      proxy_set_header Host $http_host;
       proxy_buffering off;
     }
 EOS
@@ -67,6 +68,7 @@ EOS
     proxy_pass http://localhost:#{mapping['port']}#{path};
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
     proxy_redirect default;
     proxy_buffering off;
   }
