@@ -6,6 +6,13 @@ This typically allows accessing servers via
 `service.local.dev-gutools.co.uk`, rather than a `localhost:PORT` URL,
 which among other things makes it possible to share cookies for the [pan-domain authentication](https://github.com/guardian/pan-domain-authentication).
 
+## Install ngnix
+
+To install `nginx` on OSX, make sure you have `homebrew` and then run 
+
+```
+brew install nginx
+```
 
 ## Install SSL certificates
 
