@@ -7,7 +7,6 @@ This typically allows accessing servers via
 which among other things makes it possible to share cookies for the [pan-domain authentication](https://github.com/guardian/pan-domain-authentication).
 
 ## Install ngnix
-
 To install `nginx` on OSX, make sure you have `homebrew` and then run 
 
 ```
@@ -15,7 +14,6 @@ brew install nginx
 ```
 
 ## Install SSL certificates
-
 To install the SSL certificate files:
 
 ```
@@ -30,18 +28,23 @@ nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or 
 
 in which case it should be enough to just rerun it. 
 
-### Trust root cert
-You'll need to add the root cert as a trusted CA.
+## Trust the certificates
+Add the chained certificates to your [Keychain](https://support.apple.com/kb/PH18677?locale=en_US). and trust it for SSL connections.
 
-#### OSX
-Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) to the Keychain - [guide](https://support.apple.com/kb/PH18677?locale=en_US).
+The chained certificates are:
+- [star.local.dev-gutools.co.uk.chained.crt](../ssl/star.local.dev-gutools.co.uk.chained.crt)
+- [star.media.local.dev-gutools.co.uk.chained.crt](../ssl/star.media.local.dev-gutools.co.uk.chained.crt)
 
-#### Firefox
-Firefox uses its own certificate repository. Add and trust [GNM-root-cert.pem](./ssl/GNM-root-cert.pem) - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/) (NB: This guide is slightly out of date. The "Encryption" pane in the "Advanced" menu item is now called "Certificates". Then, after importing the certificate, you might have to tick all options of the "trust settings" section).
+### Firefox
+Firefox uses its own certificate repository - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/).
+NB: This guide is slightly out of date. The "Encryption" pane in the "Advanced" menu item is now called "Certificates". 
+Then, after importing the certificate, you might have to tick all options of the "trust settings" section.
+
+## Getting a green padlock in Chrome
+See [here](./green-padlock.md) for instructions to get a green padlock in Chrome.
 
 
 ## Install config for an application
-
 To install the nginx config for an application that has an `nginx-mapping.yml` file:
 
 ```
@@ -51,7 +54,6 @@ $ sudo ./setup-app.rb path/to/nginx-mapping.yml
 Note that you will need to run this command again if the mapping file changes.
 
 ## Certificate chains
-
 Many internal certificates require the intermediate certificate to be available
 in order to validate the trust in the host certificate.
 
