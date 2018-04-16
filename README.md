@@ -32,8 +32,8 @@ in which case it should be enough to just rerun it.
 Add the chained certificates to your [Keychain](https://support.apple.com/kb/PH18677?locale=en_US). and trust it for SSL connections.
 
 The chained certificates are:
-- [star.local.dev-gutools.co.uk.chained.crt](../ssl/star.local.dev-gutools.co.uk.chained.crt)
-- [star.media.local.dev-gutools.co.uk.chained.crt](../ssl/star.media.local.dev-gutools.co.uk.chained.crt)
+- [star.local.dev-gutools.co.uk.chained.crt](ssl/star.local.dev-gutools.co.uk.chained.crt)
+- [star.media.local.dev-gutools.co.uk.chained.crt](ssl/star.media.local.dev-gutools.co.uk.chained.crt)
 
 ### Firefox
 Firefox uses its own certificate repository - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/).
