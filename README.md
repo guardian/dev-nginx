@@ -40,10 +40,6 @@ Firefox uses its own certificate repository - [guide](http://www.cyberciti.biz/f
 NB: This guide is slightly out of date. The "Encryption" pane in the "Advanced" menu item is now called "Certificates". 
 Then, after importing the certificate, you might have to tick all options of the "trust settings" section.
 
-## Getting a green padlock in Chrome
-See [here](./green-padlock.md) for instructions to get a green padlock in Chrome.
-
-
 ## Install config for an application
 To install the nginx config for an application that has an `nginx-mapping.yml` file:
 
