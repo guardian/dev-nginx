@@ -29,11 +29,7 @@ nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or 
 in which case it should be enough to just rerun it. 
 
 ## Trust the certificates
-Add the chained certificates to your [Keychain](https://support.apple.com/kb/PH18677?locale=en_US). and trust it for SSL connections.
-
-The chained certificates are:
-- [star.local.dev-gutools.co.uk.chained.crt](ssl/star.local.dev-gutools.co.uk.chained.crt)
-- [star.media.local.dev-gutools.co.uk.chained.crt](ssl/star.media.local.dev-gutools.co.uk.chained.crt)
+Add the root certificate [digital-ca.crt](./ssl/digital-ca.crt) to your [System Keychain](https://support.apple.com/kb/PH18677?locale=en_US). and trust it for SSL connections.
 
 ### Firefox
 Firefox uses its own certificate repository - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/).
@@ -91,3 +87,8 @@ cat star.local.dev-gutools.co.uk.crt GNM-DC1-intermediate.crt > star.local.dev-g
 
 If a certificate is signed directly by the root CA then there is no need to do
 this, you can just provide the server certificate on its own.
+
+## About this certificate
+This certificate was generated using [Digital-CA](https://github.com/guardian/digital-ca).
+
+Refer to this repo for instructions on how to reissue the certificate and/or issue new ones.

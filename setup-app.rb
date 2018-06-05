@@ -32,8 +32,7 @@ file = File.open(dest, 'w') do |file|
         websocket = mapping['websocket']
 
         domain = "#{mapping['prefix']}.#{domain_root}"
-        # compute base as prefix may have contained subdomains too
-        domain_base = domain.gsub(/^([a-z0-9]|\-)+\./, '')
+
         client_max_body_size = mapping['client_max_body_size']
 
         file.write <<-EOS
@@ -78,8 +77,8 @@ EOS
         if ssl
             file.write <<-EOS
   ssl on;
-  ssl_certificate     star.#{domain_base}.chained.crt;
-  ssl_certificate_key star.#{domain_base}.key;
+  ssl_certificate     star.#{domain_root}.crt;
+  ssl_certificate_key star.#{domain_root}.key;
 
   ssl_session_timeout 5m;
 
