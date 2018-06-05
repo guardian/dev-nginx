@@ -29,7 +29,7 @@ nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or 
 in which case it should be enough to just rerun it. 
 
 ## Trust the certificates
-Add the certificate [star.local.dev-gutools.co.uk.crt](./ssl/star.local.dev-gutools.co.uk.crt) to your [Keychain](https://support.apple.com/kb/PH18677?locale=en_US). and trust it for SSL connections.
+Add the root certificate [digital-ca.crt](./ssl/digital-ca.crt) to your [System Keychain](https://support.apple.com/kb/PH18677?locale=en_US). and trust it for SSL connections.
 
 ### Firefox
 Firefox uses its own certificate repository - [guide](http://www.cyberciti.biz/faq/firefox-adding-trusted-ca/).
