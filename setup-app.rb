@@ -16,7 +16,7 @@ config_file = ARGV[0]
 config = YAML.load_file(config_file)
 name = config['name']
 ssl = config.key?('ssl') ? config['ssl'] : true
-port = ssl ? 443 : 80
+port = ssl ? "443 ssl" : "80"
 global_domain_root = config['domain-root'] || DEFAULT_DOMAIN_ROOT
 dest_dir = File.join(NGINX_DIR, "sites-enabled")
 FileUtils.mkdir_p(dest_dir)
@@ -76,7 +76,6 @@ EOS
 
         if ssl
             file.write <<-EOS
-  ssl on;
   ssl_certificate     star.#{domain_root}.crt;
   ssl_certificate_key star.#{domain_root}.key;
 
