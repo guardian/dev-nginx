@@ -110,5 +110,6 @@ EOS
     end
 end
 
-
+puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
 `./restart-nginx.sh`
+puts "Done."
