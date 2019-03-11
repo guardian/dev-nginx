@@ -2,7 +2,6 @@
 
 # Create a certificate using mkcert. Assumes you have installed mkcert previously.
 # Will add the CA to the truststore for macOS, Firefox and Java.
-# brew install mkcert nss
 
 set -e
 
@@ -19,18 +18,26 @@ then
 	exit 1
 fi
 
-export JAVA_HOME=$(/usr/libexec/java_home)
+mac() {
+  [[ ${SYSTEM} == 'Darwin' ]]
+}
+
+installed() {
+  hash "$1" 2>/dev/null
+}
+
+# we're on a mac and have java installed, we can set JAVA_HOME
+if mac && installed java; then
+  export JAVA_HOME=$(/usr/libexec/java_home)
+fi
 
 NGINX_HOME=$(./locate-nginx.sh)
 CERT_DIRECTORY=$HOME/.gu/mkcert
 
 DOMAIN=$1
 
-# replace `*` with `star` for a sane filename
-FILENAME=$(echo ${DOMAIN} | sed 's/\*/star/g')
-
-KEY_FILE=${CERT_DIRECTORY}/${FILENAME}.key
-CERT_FILE=${CERT_DIRECTORY}/${FILENAME}.crt
+KEY_FILE=${CERT_DIRECTORY}/${DOMAIN}.key
+CERT_FILE=${CERT_DIRECTORY}/${DOMAIN}.crt
 
 mkcert -install
 
@@ -39,7 +46,7 @@ mkdir -p ${CERT_DIRECTORY}
 mkcert -key-file=${KEY_FILE} -cert-file=${CERT_FILE} ${DOMAIN}
 
 echo -e "Symlinking the certificate for nginx at ${NGINX_HOME}"
-ln -sf ${KEY_FILE} ${NGINX_HOME}/${FILENAME}.key
-ln -sf ${CERT_FILE} ${NGINX_HOME}/${FILENAME}.crt
+ln -sf ${KEY_FILE} ${NGINX_HOME}/${DOMAIN}.key
+ln -sf ${CERT_FILE} ${NGINX_HOME}/${DOMAIN}.crt
 
 echo -e "🚀 ${YELLOW}Done. Please restart nginx.${NC}"
