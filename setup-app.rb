@@ -18,7 +18,7 @@ name = config['name']
 ssl = config.key?('ssl') ? config['ssl'] : true
 port = ssl ? "443 ssl" : "80"
 global_domain_root = config['domain-root'] || DEFAULT_DOMAIN_ROOT
-dest_dir = File.join(NGINX_DIR, "sites-enabled")
+dest_dir = File.join(NGINX_DIR, "servers")
 FileUtils.mkdir_p(dest_dir)
 
 dest = File.join(dest_dir, "#{name}.conf")
