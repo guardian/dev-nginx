@@ -76,8 +76,8 @@ EOS
 
         if ssl
             file.write <<-EOS
-  ssl_certificate     star.#{domain_root}.crt;
-  ssl_certificate_key star.#{domain_root}.key;
+  ssl_certificate     #{domain}.crt;
+  ssl_certificate_key #{domain}.key;
 
   ssl_session_timeout 5m;
 
@@ -104,9 +104,12 @@ server {
 
 EOS
         end
-
+        if ssl
+          `./setup-certs.sh #{domain}`
+        end
     end
 end
 
-
+puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
 `./restart-nginx.sh`
+puts "Done."
