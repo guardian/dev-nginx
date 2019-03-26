@@ -48,19 +48,21 @@ ssl: <optional, defaults to `true` (you are unlikely to need to change this)>
 domain-root: <optional, defaults to `local.dev-gutools.co.uk`>
 ```
 
-Each mapping can supports the following fields:
+Each mapping supports the following fields:
 
 #### prefix
 
 **required**
 
-This is the domain prefix used for the service and will be prepended to the domain. The default domain is `local.dev-gutools.co.uk` but this can be overridden via configuration or
+This is the domain prefix used for the service and will be prepended to the domain.
+The default domain is `local.dev-gutools.co.uk`
+but this can be overridden using the `domain-root` key at the top level (to apply to all mappings) or in a mapping (to set the domain root for just that mapping).
 
 #### port
 
-Defaults to 443 for secure services, and 80 otherwise. This is typically required.
+**required**
 
-This sets the port used for the backend service. These are commonly in the 9XXXs or 8XXXs.
+This sets the port that will be proxied - i.e. the upstream backend service. These are commonly in the 9XXXs or 8XXXs.
 
 #### websocket
 
