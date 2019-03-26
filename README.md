@@ -71,3 +71,8 @@ This optionally sets the path for a websocket. If present, nginx will be configu
 #### client_max_body_size
 
 Optionally instructs nginx to set a max body size on incoming requests.
+
+#### domain-root
+
+The domain under which the service should run, which defaults to `local.dev-gutools.co.uk`.
+This can also be overriden for all mappings by specifying a `domain-root` key at the top level.
