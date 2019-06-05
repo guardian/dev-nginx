@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Create a certificate using mkcert. Assumes you have installed mkcert previously.
 # Will add the CA to the truststore for macOS, Firefox and Java.
@@ -18,17 +18,21 @@ then
 	exit 1
 fi
 
-mac() {
-  [[ ${SYSTEM} == 'Darwin' ]]
-}
-
-installed() {
-  hash "$1" 2>/dev/null
-}
-
-# we're on a mac and have java installed, we can set JAVA_HOME
-if mac && installed java; then
-  export JAVA_HOME=$(/usr/libexec/java_home)
+if type -p java > /dev/null ; then
+    # ensure JAVA_HOME is set for mkcert to install local root CA in the java trust store
+    # see https://github.com/FiloSottile/mkcert#supported-root-stores
+    if test -z ${JAVA_HOME} ; then
+        if [[ $(uname -s) == Darwin ]] ; then
+            echo -e "☕️ Running macOS and JAVA_HOME is not set. Attempting to set it..."
+            export JAVA_HOME=$(/usr/libexec/java_home)
+            echo -e "✅ JAVA_HOME now set to ${JAVA_HOME}"
+        else
+            echo -e "☕️ Java is installed but JAVA_HOME is not set. Set it before running this script."
+            exit 1
+        fi
+    fi
+else
+    echo -e "☕️ Did not detect an installation of Java."
 fi
 
 NGINX_HOME=$(./locate-nginx.sh)
@@ -41,7 +45,7 @@ CERT_FILE=${CERT_DIRECTORY}/${DOMAIN}.crt
 
 mkcert -install
 
-echo -e "🔐 Creating certificate for: ${YELLOW}$@${NC}"
+echo -e "🔐 Creating certificate for: ${YELLOW}${DOMAIN}${NC}"
 mkdir -p ${CERT_DIRECTORY}
 mkcert -key-file=${KEY_FILE} -cert-file=${CERT_FILE} ${DOMAIN}
 
