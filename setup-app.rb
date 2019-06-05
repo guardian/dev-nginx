@@ -31,7 +31,7 @@ file = File.open(dest, 'w') do |file|
         path = mapping['path'] || ''
         websocket = mapping['websocket']
 
-        domain = "#{mapping['prefix']}.#{domain_root}"
+        domain = if mapping['prefix'] then "#{mapping['prefix']}.#{domain_root}" else "#{domain_root}" end
 
         client_max_body_size = mapping['client_max_body_size']
 
