@@ -8,8 +8,9 @@ if ARGV.size != 1
     exit(1)
 end
 
+HERE=File.dirname(__FILE__)
 DEFAULT_DOMAIN_ROOT = "local.dev-gutools.co.uk"
-NGINX_DIR = `./locate-nginx`.chomp
+NGINX_DIR = `#{HERE}/locate-nginx`.chomp
 
 config_file = ARGV[0]
 
@@ -105,11 +106,11 @@ server {
 EOS
         end
         if ssl
-          `./setup-cert #{domain}`
+          `#{HERE}/setup-cert #{domain}`
         end
     end
 end
 
 puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
-`./restart-nginx`
+`#{HERE}/restart-nginx`
 puts "Done."
