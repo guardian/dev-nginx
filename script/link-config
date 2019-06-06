@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# colours
+YELLOW='\033[1;33m'
+NC='\033[0m' # no colour - reset console colour
+
+if [[ $# -lt 1 ]]
+then
+  echo "link-config /path/to/file.conf"
+  echo "symlink an nginx config file and restarts nginx"
+	exit 1
+fi
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+NGINX_HOME=$("${DIR}/locate-nginx")
+
+FILE=$1
+
+if [[ ! -f ${FILE} ]]; then
+    echo "File $FILE not found"
+    exit 1
+else
+  ln -fs ${FILE} ${NGINX_HOME}/servers/$(basename "$FILE")
+fi

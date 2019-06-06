@@ -43,6 +43,8 @@ $ dev-nginx
 
 dev-nginx COMMAND <OPTIONS>
 Available commands:
+- add-to-hosts-file
+- link-config
 - locate-nginx
 - restart-nginx
 - setup-app
@@ -50,6 +52,22 @@ Available commands:
 ```
 
 ### Commands
+#### `add-to-hosts-file`
+```bash
+dev-nginx add-to-hosts-file
+```
+
+If it does not already exist, adds an entry to `/etc/hosts` that resolves to `127.0.0.1`.
+
+
+#### `link-config`
+```bash
+dev-nginx link-config /path/to/site.conf
+```
+
+Symlink an existing file into nginx configuration. You'll need to restart nginx to activate it (`dev-nginx restart-nginx`).
+
+
 #### `locate-nginx`
 ```bash
 dev-nginx locate-nginx
