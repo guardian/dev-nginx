@@ -4,12 +4,12 @@ require 'yaml'
 require 'fileutils'
 
 if ARGV.size != 1
-    puts "usage: setup-app.rb <config.yml>"
+    puts "usage: setup-app <config.yml>"
     exit(1)
 end
 
 DEFAULT_DOMAIN_ROOT = "local.dev-gutools.co.uk"
-NGINX_DIR = `./locate-nginx.sh`.chomp
+NGINX_DIR = `./locate-nginx`.chomp
 
 config_file = ARGV[0]
 
@@ -105,11 +105,11 @@ server {
 EOS
         end
         if ssl
-          `./setup-certs.sh #{domain}`
+          `./setup-cert #{domain}`
         end
     end
 end
 
 puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
-`./restart-nginx.sh`
+`./restart-nginx`
 puts "Done."
