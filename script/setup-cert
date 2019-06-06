@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Create a certificate using mkcert. Assumes you have installed mkcert previously.
 # Will add the CA to the truststore for macOS, Firefox and Java.
