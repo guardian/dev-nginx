@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+function availableCommands {
+  echo "Available commands: setup-app, setup-cert, locate-nginx, restart-nginx"
+}
+
+function usage {
+  echo "dev-nginx"
+  echo "Usage: dev-nginx COMMAND <OPTIONS>"
+  availableCommands
+  exit 1
+}
+
+if [[ $# -lt 1 ]] ; then
+  usage
+fi
+
+SCRIPT_NAME=$1
+SCRIPT="script/$SCRIPT_NAME"
+
+if [[ -f "${SCRIPT}" ]]; then
+  ${SCRIPT} ${@:2}
+else
+  echo "dev-nginx command ${SCRIPT_NAME} not recognised"
+  availableCommands
+  exit 1
+fi
