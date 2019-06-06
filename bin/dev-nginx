@@ -18,7 +18,7 @@ if [[ $# -lt 1 ]] ; then
 fi
 
 SCRIPT_NAME=$1
-SCRIPT="script/$SCRIPT_NAME"
+SCRIPT="${DIR}/../script/$SCRIPT_NAME"
 
 if [[ -f "${SCRIPT}" ]]; then
   ${SCRIPT} ${@:2}
