@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SOURCE="${BASH_SOURCE[0]}"
+DIR="$( cd "$( dirname "$SOURCE" )" && pwd )"
+MAYBE_SYMLINK="$(readlink "$SOURCE")"
+
+if [[ -z "$MAYBE_SYMLINK" ]] ; then
+  BIN_DIR=$DIR
+else
+  BIN_DIR=$(dirname "$DIR/$MAYBE_SYMLINK")
+fi
+
+SCRIPT_DIR="${BIN_DIR}/../script"
 
 function availableCommands {
-  echo "Available commands: setup-app, setup-cert, locate-nginx, restart-nginx"
+  echo "Available commands:"
+  for file in $SCRIPT_DIR/*; do
+    echo "- $(basename "$file")"
+  done
 }
 
 function usage {
-  echo "dev-nginx"
-  echo "Usage: dev-nginx COMMAND <OPTIONS>"
+  echo "dev-nginx COMMAND <OPTIONS>"
   availableCommands
   exit 1
 }
@@ -18,12 +30,12 @@ if [[ $# -lt 1 ]] ; then
 fi
 
 SCRIPT_NAME=$1
-SCRIPT="${DIR}/../script/$SCRIPT_NAME"
+SCRIPT="$SCRIPT_DIR/$SCRIPT_NAME"
 
 if [[ -f "${SCRIPT}" ]]; then
   ${SCRIPT} ${@:2}
 else
-  echo "dev-nginx command ${SCRIPT_NAME} not recognised"
+  echo "dev-nginx ${SCRIPT_NAME} not recognised"
   availableCommands
   exit 1
 fi
