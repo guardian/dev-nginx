@@ -31,7 +31,9 @@ if mac && installed java; then
   export JAVA_HOME=$(/usr/libexec/java_home)
 fi
 
-NGINX_HOME=$(./locate-nginx.sh)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+NGINX_HOME=$("${DIR}/locate-nginx.sh")
 CERT_DIRECTORY=$HOME/.gu/mkcert
 
 DOMAIN=$1
