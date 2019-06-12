@@ -4,12 +4,13 @@ require 'yaml'
 require 'fileutils'
 
 if ARGV.size != 1
-    puts "usage: setup-app.rb <config.yml>"
+    puts "usage: setup-app <config.yml>"
     exit(1)
 end
 
+HERE=File.dirname(__FILE__)
 DEFAULT_DOMAIN_ROOT = "local.dev-gutools.co.uk"
-NGINX_DIR = `./locate-nginx.sh`.chomp
+NGINX_DIR = `#{HERE}/locate-nginx`.chomp
 
 config_file = ARGV[0]
 
@@ -105,11 +106,11 @@ server {
 EOS
         end
         if ssl
-          `./setup-certs.sh #{domain}`
+          `#{HERE}/setup-cert #{domain}`
         end
     end
 end
 
 puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
-`./restart-nginx.sh`
+`#{HERE}/restart-nginx`
 puts "Done."
