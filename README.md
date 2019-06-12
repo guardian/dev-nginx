@@ -35,6 +35,21 @@ brew bundle
 
 - Add [`bin`](./bin) to your PATH
 
+### Linux and Windows
+As listed in the [Brewfile](./Brewfile), `dev-nginx` requires [`nginx`](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/) and [`mkcert`](https://github.com/FiloSottile/mkcert). 
+Once you have installed these dependencies, you can:
+
+- Clone this repository:
+```bash
+git clone git@github.com:guardian/dev-nginx.git
+
+# update
+git pull
+```
+
+- Add [`bin`](./bin) to your PATH
+
+
 ## Usage
 `dev-nginx` has a few commands available. Find them by passing no arguments:
 
