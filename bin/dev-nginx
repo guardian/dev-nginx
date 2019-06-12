@@ -37,5 +37,6 @@ if [[ -f "${SCRIPT}" ]]; then
 else
   echo "dev-nginx ${SCRIPT_NAME} not recognised"
   availableCommands
+  echo "Try updating dev-nginx and retrying."
   exit 1
 fi
