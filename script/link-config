@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # colours
 YELLOW='\033[1;33m'
 NC='\033[0m' # no colour - reset console colour
