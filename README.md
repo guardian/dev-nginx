@@ -18,37 +18,22 @@ brew upgrade dev-nginx
 ```
 
 ### Manually
-- Clone this repository:
+As listed in the [Brewfile](./Brewfile), `dev-nginx` requires:
+- [`nginx`](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/)
+- [`mkcert`](https://github.com/FiloSottile/mkcert). 
 
-```bash
-git clone git@github.com:guardian/dev-nginx.git
-
-# update
-git pull && brew bundle
-```
-
-- Install dependencies listed in the [Brewfile](./Brewfile):
-
-```bash
-brew bundle
-```
-
-- Add [`bin`](./bin) to your PATH
-
-### Linux and Windows
-As listed in the [Brewfile](./Brewfile), `dev-nginx` requires [`nginx`](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/) and [`mkcert`](https://github.com/FiloSottile/mkcert). 
 Once you have installed these dependencies, you can:
+- Download the [latest release](https://github.com/guardian/dev-nginx/releases/latest)
+- Extract it
+- Add the `bin` directory to your PATH.
 
-- Clone this repository:
+For example:
+
 ```bash
-git clone git@github.com:guardian/dev-nginx.git
-
-# update
-git pull
+wget -q https://github.com/guardian/dev-nginx/releases/latest/download/dev-nginx.tar.gz
+mkdir -p dev-nginx && tar -xzf dev-nginx.tar.gz -C dev-nginx
+export PATH="$PATH:$PWD/dev-nginx/bin"
 ```
-
-- Add [`bin`](./bin) to your PATH
-
 
 ## Usage
 `dev-nginx` has a few commands available. Find them by passing no arguments:
