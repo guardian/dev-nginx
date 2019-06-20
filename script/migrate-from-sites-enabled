@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+NGINX_HOME=$("${DIR}/locate-nginx")
+
+OLD_DIRECTORY=${NGINX_HOME}/sites-enabled
+NEW_DIRECTORY=${NGINX_HOME}/servers
+
+for file in $OLD_DIRECTORY/*; do
+  if [[ -f "$file" ]] || [[ -L "$file" ]]; then
+    destination=$NEW_DIRECTORY/$(basename "$file")
+    echo "moving $file to $destination"
+    mv $file $destination
+  fi
+done

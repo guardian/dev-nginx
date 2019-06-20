@@ -89,6 +89,16 @@ dev-nginx setup-cert demo-frontend.foobar.co.uk
 
 Uses `mkcert` to issue a certificate for a domain, writing it to `~/.gu/mkcert` and symlinking it into the directory nginx is installed.
 
+#### `migrate-from-sites-enabled`
+```bash
+dev-nginx migrate-from-sites-enabled
+```
+
+In previous versions of nginx it was common to place virtual host configuration in the `sites-enabled` directory.
+More recent versions of nginx uses the `servers` directory.
+
+`migrate-from-sites-enabled` will move files from `sites-enabled` into `servers` to avoid providing nginx with duplicate config from two different directories.
+
 #### `setup-app`
 ```bash
 dev-nginx setup-app /path/to/nginx-mapping.yml
