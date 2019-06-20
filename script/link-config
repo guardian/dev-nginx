@@ -24,3 +24,10 @@ if [[ ! -f ${FILE} ]]; then
 else
   ln -fs ${FILE} ${NGINX_HOME}/servers/$(basename "$FILE")
 fi
+
+# remove file (or symlink) from legacy `sites-enabled` directory if it exists
+MAYBE_OLD_FILE=${NGINX_HOME}/sites-enabled/$(basename "$FILE")
+
+if [[ -f "$MAYBE_OLD_FILE" ]] || [[ -L "$MAYBE_OLD_FILE" ]]; then
+  rm ${MAYBE_OLD_FILE}
+fi
