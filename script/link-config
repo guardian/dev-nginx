@@ -22,7 +22,9 @@ if [[ ! -f ${FILE} ]]; then
     echo "File $FILE not found"
     exit 1
 else
-  ln -fs ${FILE} ${NGINX_HOME}/servers/$(basename "$FILE")
+  DESTINATION_DIR=${NGINX_HOME}/servers
+  mkdir -p $DESTINATION_DIR
+  ln -fs ${FILE} $DESTINATION_DIR/$(basename "$FILE")
 fi
 
 # remove file (or symlink) from legacy `sites-enabled` directory if it exists
