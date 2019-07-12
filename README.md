@@ -6,7 +6,10 @@ This typically allows accessing servers via
 `service.local.dev-gutools.co.uk`, rather than a `localhost:PORT` URL,
 which among other things makes it possible to share cookies for the [pan-domain authentication](https://github.com/guardian/pan-domain-authentication).
 
+Unfamiliar with nginx? [More details here](./EXPLAINER.md).
+
 ## Installation
+
 ### Via Homebrew
 
 ```bash
@@ -18,11 +21,14 @@ brew upgrade dev-nginx
 ```
 
 ### Manually
+
 As listed in the [Brewfile](./Brewfile), `dev-nginx` requires:
+
 - [`nginx`](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/)
-- [`mkcert`](https://github.com/FiloSottile/mkcert). 
+- [`mkcert`](https://github.com/FiloSottile/mkcert).
 
 Once you have installed these dependencies, you can:
+
 - Download the [latest release](https://github.com/guardian/dev-nginx/releases/latest)
 - Extract it
 - Add the `bin` directory to your PATH.
@@ -36,6 +42,7 @@ export PATH="$PATH:$PWD/dev-nginx/bin"
 ```
 
 ## Usage
+
 `dev-nginx` has a few commands available. Find them by passing no arguments:
 
 ```console
@@ -52,23 +59,25 @@ Available commands:
 ```
 
 ### Commands
+
 #### `add-to-hosts-file`
+
 ```bash
 dev-nginx add-to-hosts-file
 ```
 
 If it does not already exist, adds an entry to `/etc/hosts` that resolves to `127.0.0.1`.
 
-
 #### `link-config`
+
 ```bash
 dev-nginx link-config /path/to/site.conf
 ```
 
 Symlink an existing file into nginx configuration. You'll need to restart nginx to activate it (`dev-nginx restart-nginx`).
 
-
 #### `locate-nginx`
+
 ```bash
 dev-nginx locate-nginx
 ```
@@ -76,6 +85,7 @@ dev-nginx locate-nginx
 Locates the directory nginx is installed.
 
 #### `restart-nginx`
+
 ```bash
 dev-nginx restart-nginx
 ```
@@ -83,6 +93,7 @@ dev-nginx restart-nginx
 Stops, if running, and starts nginx.
 
 #### `setup-cert`
+
 ```bash
 dev-nginx setup-cert demo-frontend.foobar.co.uk
 ```
@@ -90,13 +101,15 @@ dev-nginx setup-cert demo-frontend.foobar.co.uk
 Uses `mkcert` to issue a certificate for a domain, writing it to `~/.gu/mkcert` and symlinking it into the directory nginx is installed.
 
 #### `setup-app`
+
 ```bash
 dev-nginx setup-app /path/to/nginx-mapping.yml
 ```
 
-Generates config for nginx proxy site(s) from a config file, issues the certificate(s) and restarts nginx. 
+Generates config for nginx proxy site(s) from a config file, issues the certificate(s) and restarts nginx.
 
 ##### Config format
+
 Your application's configuration is provided as a YAML file in the following format.
 
 **Example:**
@@ -105,18 +118,17 @@ Your application's configuration is provided as a YAML file in the following for
 name: demo
 domain-root: foobar.co.uk
 mappings:
-- port: 9001
-  prefix: demo-frontend
-- port: 8800
-  prefix: demo-api
+  - port: 9001
+    prefix: demo-frontend
+  - port: 8800
+    prefix: demo-api
 ```
 
 In general, the format is as follows:
 
 ```yaml
 name: <name of the project, used as its filename>
-mappings:
-  <list of server mappings>
+mappings: <list of server mappings>
 ssl: <optional, defaults to `true` (you are unlikely to need to change this)>
 domain-root: <optional, defaults to `local.dev-gutools.co.uk`>
 ```
@@ -151,6 +163,7 @@ The domain under which the service should run, which defaults to `local.dev-guto
 This can also be overriden for all mappings by specifying a `domain-root` key at the top level.
 
 ##### Hosts file
+
 You'll need to ensure your hosts file has entries for your new domains, so that they resolve:
 
 ```
