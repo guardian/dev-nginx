@@ -6,7 +6,23 @@ This typically allows accessing servers via
 `service.local.dev-gutools.co.uk`, rather than a `localhost:PORT` URL,
 which among other things makes it possible to share cookies for the [pan-domain authentication](https://github.com/guardian/pan-domain-authentication).
 
-Unfamiliar with nginx? [More details here](./EXPLAINER.md).
+### What does dev-nginx do?
+
+Installing and running dev-nginx will start an [nginx](https://nginx.org/en/) server instance locally on your machine.
+
+This instance will use any `*.conf` files found locally within the directory `/nginx/servers` to generate a virtual server host to proxy requests to localhost. You can locate this directory with the command `dev-nginx locate-nginx`.
+
+Each project config should include http directives for proxy localhost ports and necessary SSL certificates. This is quite repetitive, so `dev-nginx` abstracts it away with the `setup-app` and `setup-cert` commands.
+
+### What happens when dev-nginx is up and running locally?
+
+1. The browser will make a request to a local development domain url, e.g. `service.local.dev-gutools.co.uk`
+2. Request goes out to DNS where `*.local.dev-gutools.co.uk` is set to resolve back to `localhost` (IP address: `127.0.0.1`)
+   - An alternative to using DNS is to add a new development url entry to `/etc/hosts` file resolving to 127.0.0.1. This can be done with `dev-nginx add-to-hosts-file <DOMAIN>`.
+3. Nginx server running locally receives the request
+4. Nginx server iterates over its virtual hosts, if it finds a `server_name` that matches the request, it will then proxy the request to the correct local project server instance.
+
+<img src="https://user-images.githubusercontent.com/32312712/61088623-b004c980-a430-11e9-8a8b-eb78856c90d9.png" alt="diagram" width="500"/>
 
 ## Installation
 
