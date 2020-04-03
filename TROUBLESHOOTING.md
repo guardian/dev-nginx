@@ -1,6 +1,8 @@
 # Troubleshooting
 
 ## Hitting one hostname actually tries to serve another
+This can happen if you don't use the standard [setup-app command](README.md#setup-app)
+
 `$ tail /usr/local/var/log/nginx/error.log`
 shows something like this
 
