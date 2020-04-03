@@ -6,6 +6,9 @@ This typically allows accessing servers via
 `service.local.dev-gutools.co.uk`, rather than a `localhost:PORT` URL,
 which among other things makes it possible to share cookies for the [pan-domain authentication](https://github.com/guardian/pan-domain-authentication).
 
+### Strange errors or behaviour
+See [troubleshooting faq](TROUBLESHOOTING.md)
+
 ### What does dev-nginx do?
 
 Installing and running dev-nginx will start an [nginx](https://nginx.org/en/) server instance locally on your machine.
