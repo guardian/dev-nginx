@@ -13,7 +13,7 @@ See [troubleshooting faq](TROUBLESHOOTING.md)
 
 Installing and running dev-nginx will start an [nginx](https://nginx.org/en/) server instance locally on your machine.
 
-This instance will use any `*.conf` files found locally within the directory `/nginx/servers` to generate a virtual server host to proxy requests to localhost. You can locate this directory with the command `dev-nginx locate-nginx`.
+This instance will use any `*.conf` files found locally within the directory `/nginx/servers` to generate a virtual server host to proxy requests to localhost. You can locate this directory with the command `dev-nginx locate`.
 
 Each project config should include http directives for proxy localhost ports and necessary SSL certificates. This is quite repetitive, so `dev-nginx` abstracts it away with the `setup-app` and `setup-cert` commands.
 
@@ -71,10 +71,11 @@ dev-nginx COMMAND <OPTIONS>
 Available commands:
 - add-to-hosts-file
 - link-config
-- locate-nginx
-- restart-nginx
+- locate
+- restart
 - setup-app
 - setup-cert
+- start
 ```
 
 ### Commands
@@ -93,20 +94,27 @@ If it does not already exist, adds an entry to `/etc/hosts` that resolves to `12
 dev-nginx link-config /path/to/site.conf
 ```
 
-Symlink an existing file into nginx configuration. You'll need to restart nginx to activate it (`dev-nginx restart-nginx`).
+Symlink an existing file into nginx configuration. You'll need to restart nginx to activate it (`dev-nginx restart`).
 
-#### `locate-nginx`
+#### `locate`
 
 ```bash
-dev-nginx locate-nginx
+dev-nginx locate
 ```
 
 Locates the directory nginx is installed.
 
-#### `restart-nginx`
+#### `start`
+```bash
+dev-nginx start
+```
+
+Starts nginx. Will fail if currently running. Add `-g` to ignore if nginx is currently running.
+
+#### `restart`
 
 ```bash
-dev-nginx restart-nginx
+dev-nginx restart
 ```
 
 Stops, if running, and starts nginx.
