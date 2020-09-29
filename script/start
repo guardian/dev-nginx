@@ -6,12 +6,24 @@ set -e
 YELLOW='\033[1;33m'
 NC='\033[0m' # no colour - reset console colour
 
-IGNORE_IF_ALREADY_RUNNING=false
+GRACEFUL=false
+
+function printHelp() {
+  echo "Starts nginx. Will fail if nginx is already running."
+  echo "  Flags:"
+  echo "    -g | --graceful ignore nginx if it's already running"
+  echo "    -h | --help     print this message"
+  exit 0
+}
 
 while test $# -gt 0; do
   case "$1" in
-    -i|--ignore-if-already-running)
-      IGNORE_IF_ALREADY_RUNNING=true
+    -g|--graceful)
+      GRACEFUL=true
+      shift
+      ;;
+    -h|--help)
+      printHelp
       shift
       ;;
     *)
@@ -21,13 +33,13 @@ while test $# -gt 0; do
 done
 
 if pgrep 'nginx' > /dev/null; then
-  echo "nginx already running"
-  if [ "$IGNORE_IF_ALREADY_RUNNING" = false ] ; then
-    echo -e "Did you mean ${YELLOW}dev-nginx start -i${NC} or ${YELLOW}dev-nginx restart${NC}?"
+  if [ "$GRACEFUL" = true ] ; then
+    exit 0
+  else
+    echo -e "Error: nginx already running. Did you mean ${YELLOW}dev-nginx restart${NC} or ${YELLOW}dev-nginx start -g${NC}?"
     exit 1
   fi
 else
   echo -e "${YELLOW}Starting nginx. This requires sudo access.${NC}"
   sudo nginx
 fi
-

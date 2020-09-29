@@ -109,7 +109,7 @@ Locates the directory nginx is installed.
 dev-nginx start
 ```
 
-Starts nginx. Will fail if currently running. Add `-i` to ignore if nginx is currently running.
+Starts nginx. Will fail if currently running. Add `-g` to ignore if nginx is currently running.
 
 #### `restart`
 
