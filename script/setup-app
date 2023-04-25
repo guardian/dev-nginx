@@ -3,8 +3,8 @@
 require 'yaml'
 require 'fileutils'
 
-if ARGV.size != 1
-    puts "usage: setup-app <config.yml>"
+if ARGV.size != 1 and ARGV.size != 2
+    puts "usage: setup-app [--force] <config.yml>"
     exit(1)
 end
 
@@ -12,7 +12,9 @@ HERE=File.dirname(__FILE__)
 DEFAULT_DOMAIN_ROOT = "local.dev-gutools.co.uk"
 NGINX_DIR = `#{HERE}/locate-nginx`.chomp
 
-config_file = ARGV[0]
+config_file = ARGV[0] != "--force" ? ARGV[0] : ARGV[1]
+
+force = ARGV[0] == "--force" or ARGV[1] == "--force"
 
 config = YAML.load_file(config_file)
 name = config['name']
@@ -24,32 +26,32 @@ FileUtils.mkdir_p(dest_dir)
 
 dest = File.join(dest_dir, "#{name}.conf")
 
-file = File.open(dest, 'w') do |file|
+server_config = ""
 
-    config['mappings'].each do |mapping|
+config['mappings'].each do |mapping|
 
-        domain_root = mapping['domain-root'] || global_domain_root
-        path = mapping['path'] || ''
-        websocket = mapping['websocket']
+  domain_root = mapping['domain-root'] || global_domain_root
+  path = mapping['path'] || ''
+  websocket = mapping['websocket']
 
-        domain = if mapping['prefix'] then "#{mapping['prefix']}.#{domain_root}" else "#{domain_root}" end
+  domain = if mapping['prefix'] then "#{mapping['prefix']}.#{domain_root}" else "#{domain_root}" end
 
-        client_max_body_size = mapping['client_max_body_size']
+  client_max_body_size = mapping['client_max_body_size']
 
-        file.write <<-EOS
+  server_config << <<-EOS
 server {
   listen #{port};
   server_name #{domain};
 EOS
-        if client_max_body_size
-          file.write <<-EOS
+  if client_max_body_size
+    server_config << <<-EOS
   client_max_body_size #{client_max_body_size};
 
-          EOS
-        end
+EOS
+  end
 
-        if websocket
-            file.write <<-EOS
+  if websocket
+    server_config << <<-EOS
 
     location #{websocket} {
       proxy_pass http://localhost:#{mapping['port']}#{websocket};
@@ -60,9 +62,9 @@ EOS
       proxy_buffering off;
     }
 EOS
-        end
+  end
 
-	file.write <<-EOS
+  server_config << <<-EOS
 
   location / {
     proxy_http_version 1.1;
@@ -77,8 +79,8 @@ EOS
 
 EOS
 
-        if ssl
-            file.write <<-EOS
+  if ssl
+    server_config << <<-EOS
   ssl_certificate     #{domain}.crt;
   ssl_certificate_key #{domain}.key;
 
@@ -88,15 +90,15 @@ EOS
   ssl_ciphers HIGH:!aNULL:!MD5;
   ssl_prefer_server_ciphers on;
 EOS
-        end
+  end
 
-        file.write <<-EOS
+  server_config << <<-EOS
 }
 
 EOS
 
-        if ssl
-          file.write <<-EOS
+  if ssl
+    server_config << <<-EOS
 server {
   listen 80;
   server_name #{domain};
@@ -106,13 +108,27 @@ server {
 }
 
 EOS
-        end
-        if ssl
-          `#{HERE}/setup-cert #{domain}`
-        end
-    end
+  end
+  if ssl
+    opts = force ? "--force" : ""
+    `#{HERE}/setup-cert #{domain} #{opts}`
+  end
 end
 
-puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
-`#{HERE}/restart-nginx`
-puts "Done."
+begin
+  old_server_config = File.read(dest)
+rescue
+  old_server_config = ""
+end
+
+if force or old_server_config != server_config
+  file = File.open(dest, 'w') do |file|
+    file.write server_config
+    puts "Restarting nginx. This needs sudo permission, please enter password when prompted."
+    `#{HERE}/restart-nginx`
+    puts "Done."
+  end
+else
+  puts "Found existing nginx configuration for this app, so doing nothing."
+  puts "Rerun with --force to force installation of new configuration if required."
+end
