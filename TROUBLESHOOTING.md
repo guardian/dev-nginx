@@ -37,3 +37,46 @@ http {
 ```
 
 See [the docs](https://nginx.org/en/docs/http/server_names.html#optimization) for more information.
+
+## OAuth Cookies Not Persisting After Callback
+
+### Symptoms:
+
+- After completing the /oauth/callback flow, the expected cookies (GU_ACCESS_TOKEN, GU_ID_TOKEN) are not persisted in the browser.
+- The browser receives a 502 Bad Gateway response from Nginx during or after the callback step.
+- No visible application error occurs client-side, making the issue hard to trace.
+
+### Root Cause:
+The total size of the cookies being set (particularly access_token and id_token) exceeded Nginx’s default buffer limits. When the combined size of all Set-Cookie headers goes beyond ~8KB, Nginx silently truncates or drops the headers, resulting in failed cookie persistence and a 502 response.
+
+### Why this only affected some developers:
+
+- Token sizes vary based on user profile complexity, scopes, or IDP configuration.
+- Some tokens remained under the limit, while others exceeded it — depending on the Okta response.
+- Developers with longer tokens encountered the silent header truncation and 502 error.
+- At the time of writing this entry, I was using a Intel Macbook Pro.
+
+### Fix: Increase Nginx Header and Cookie Size Limits
+
+To support larger headers and cookies, increase the buffer sizes in your nginx.conf. Add the following inside the http block:
+
+```
+http {
+    ...
+    proxy_buffer_size 16k;
+    proxy_buffers 8 16k;
+    proxy_busy_buffers_size 32k;
+    large_client_header_buffers 4 16k;
+    ...
+}
+```
+
+Then restart Nginx:
+
+```
+brew services restart nginx
+```
+or
+```
+sudo nginx -s reload
+```
