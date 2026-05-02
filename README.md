@@ -122,18 +122,22 @@ Stops, if running, and starts nginx.
 #### `setup-cert`
 
 ```bash
-dev-nginx setup-cert demo-frontend.foobar.co.uk
+dev-nginx setup-cert [--force] demo-frontend.foobar.co.uk
 ```
 
 Uses `mkcert` to issue a certificate for a domain, writing it to `~/.gu/mkcert` and symlinking it into the directory nginx is installed.
+By default will do nothing if a certificate has been issued, installed and remains valid for the next 14 days. Include the `--force` flag
+to issue a new certificate if required.
 
 #### `setup-app`
 
 ```bash
-dev-nginx setup-app /path/to/nginx-mapping.yml
+dev-nginx setup-app [--force] /path/to/nginx-mapping.yml
 ```
 
 Generates config for nginx proxy site(s) from a config file, issues the certificate(s) and restarts nginx.
+By default will do nothing if config already exists and matches what would be generated. Include the `--force` flag to
+install config and issue new certificates if required.
 
 ##### Config format
 
