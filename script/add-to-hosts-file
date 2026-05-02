@@ -16,7 +16,7 @@ fi
 
 DOMAIN=$1
 
-if grep '127.0.0.1' /etc/hosts | grep ${DOMAIN} ; then
+if grep -E "^127.0.0.1\\s+${DOMAIN}\\s*$" /etc/hosts ; then
   echo -e "✅ /etc/hosts entry already exists for ${DOMAIN}"
 else
   echo -e "🔧 ${YELLOW}adding /etc/hosts entry for ${DOMAIN}. Requires sudo - enter password when prompted.${NC}"
